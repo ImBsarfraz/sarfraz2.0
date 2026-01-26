@@ -29,46 +29,49 @@ function ExperienceItem({ exp, idx, start, end, scrollYProgress, layout }) {
   const x = useTransform(scrollYProgress, [start, end], [-24, 0]);
 
   if (layout === "desktop") {
-    return (
-      <div className='relative flex-1 items-center justify-center  min-w-0'>
-        <motion.div
-          className='absolute top-0 left-1/2 -translate-x-18 z-10 w-7 h-7 rounded-full bg-white shadow-[0_0_0_8px_rgba(255, 255, 255, 0.1)]'
-          style={{
-            scale,
-            opacity
-          }}
-        >
+    const isAbove = (idx + 1) % 2 !== 0;
 
-        </motion.div>
+    return (
+      <div className="relative flex-1 min-w-0 h-full">
+
+        {/* DOT — EXACTLY ON THE LINE */}
         <motion.div
-          className={`absolute ${idx % 2 === 0 ? "-top-10 left-38.5" : "-bottom-15 left-38"} w-[3px] bg-white/40`}
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
+                   z-20 w-7 h-7 rounded-full bg-white
+                   shadow-[0_0_0_8px_rgba(255,255,255,0.1)]"
+          style={{ scale, opacity }}
+        />
+
+        {/* CONNECTOR */}
+        <motion.div
+          className="absolute left-1/2 -translate-x-1/2 w-[3px] bg-white/40"
           style={{
             height: 40,
-            opacity
-          }}
-        >
-        </motion.div>
-        <motion.article
-          className={`absolute ${idx % 2 === 0 ? "bottom-12" : "top-12"} bg-gray-900/80 backdrop-blur border border-gray-700/70 rounded-xl p-7 w-[320px] shadow-lg`}
-          style={{
+            top: isAbove ? "calc(50% - 40px)" : "50%",
             opacity,
-            y,
-            maxWidth: "90vw",
           }}
-          transition={{ duration: 0.4, delay: idx * 0.15 }}
+        />
+
+        {/* CARD */}
+        <motion.article
+          className="absolute left-1/2 -translate-x-1/2
+                   bg-gray-900/80 backdrop-blur
+                   border border-gray-700/70
+                   rounded-xl p-7 w-[320px] shadow-lg"
+          style={{
+            top: isAbove ? "calc(50% - 240px)" : "calc(50% + 80px)",
+            opacity,
+          }}
         >
-          <h3 className='text-xl font-semibold'>
-            {
-              exp.role
-            }
-          </h3>
-          <p className='text-md text-gray-400 mb-3'>
+          <h3 className="text-xl font-semibold">{exp.role}</h3>
+          <p className="text-md text-gray-400 mb-3">
             {exp.company} | {exp.duration}
           </p>
-          <p className='text-md text-gray-300 break-words'>{exp.description}</p>
+          <p className="text-md text-gray-300">{exp.description}</p>
         </motion.article>
+
       </div>
-    )
+    );
   }
 
   return (
